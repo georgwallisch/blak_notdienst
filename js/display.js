@@ -9,9 +9,18 @@ function showNotdienstUmkreis(location_id, range, day) {
 	*/
 	/*{'class':'display-2'}*/
 	
-	var box = $('<div>', {'class':'container'}).appendTo($('<div>', {'class':'jumbotron'}).appendTo(main));
+	var datumElem =	$('<h1>',{'id':'DatumUhrzeit', 'class':'DatumUhrzeit'}).appendTo(main);
 		
-	$('<h1>',/*{'class':'display-3'}*/).text('Notdienst am ' + day.format('dddd, DD.MM.YYYY')).appendTo(box);
+	var datumsanzeige = setInterval(function() {
+		var d = moment().format('dddd, DD.MM.YYYY HH:mm');
+		datumElem.text(d);		
+	}, 3000);	
+	
+	var box = $('<div>', {'class':'container'}).appendTo($('<div>', {'class':'jumbotron'}).appendTo(main));
+	/*{'class':'display-3'}*/
+	/* $('<h1>').text('Notdienst am ' + day.format('dddd, DD.MM.YYYY')).appendTo(box); */
+	$('<h1>').text('Notdienstbereit Apotheken:').appendTo(box);
+	
 	getNotdienstUmkreis(location_id, range, day).done(function(res) {
 			var row = $('<div>', {'class':'row'}).appendTo(box);
 			for(let e of res) {
@@ -19,6 +28,10 @@ function showNotdienstUmkreis(location_id, range, day) {
 				$('<h3>').text(e.name).appendTo(elem);
 				$('<address>').html(e.street + '<br /><strong>'+e.location+'</strong>').appendTo(elem);
 				$('<div>', {'class':'phone'}).text('Telefon: ' + e.tel).appendTo(elem);
+				$('<div>', {'class':'servicetime'}).text('Dienstbereit: ' + e.servicetime).appendTo(elem);
+				if(apo_name == e.name && e.location.search(apo_ort) >= 0) {
+					elem.addClass('dienstbereit');
+				}
 			}	
 	});
 	
@@ -37,7 +50,7 @@ $(document).ready(function() {
 	var morgen = toMS(moment().add(1, 'days'),8);
 	
 	var refresher;
-	
+		
 	showNotdienstUmkreis(apo_id);
 	
 	setTimeout(function () {

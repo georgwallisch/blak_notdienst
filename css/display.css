@@ -17,7 +17,15 @@
 
 	#mainbox {
 		margin-top: 50px;		
-	} 
+	}
+	
+	.DatumUhrzeit {
+		margin-bottom: 30px;
+		background-color: #f8f9fa;
+		padding: 10px 20px;
+		text-align: center;
+		font-weight: bold;
+	}
 	
 	.jumbotron {
 		padding: 2rem 2rem;
@@ -36,6 +44,11 @@
 	
 	div.apobox h3 {
 		/* background-color: #aaa;*/
+	}
+	
+	.dienstbereit h3 {
+		color: red !important;
+		font-weight: bold;
 	}
 	
 		
