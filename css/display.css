@@ -1,0 +1,43 @@
+@media all {
+
+	body.loc_KEM {
+		background-image: url("../img/bg_kemnath_v3.png");	
+		background-repeat: no-repeat;
+		background-color: #fff;
+		background-position: right top;		
+	}
+	
+	#headline.loc_KEM {
+		background-image: url("../img/kem_logo.png");	
+		background-repeat: no-repeat;
+		margin-top: 30px;
+		height: 120px;
+		margin-bottom: 30px;
+	}
+
+	#mainbox {
+		margin-top: 50px;		
+	} 
+	
+	.jumbotron {
+		padding: 2rem 2rem;
+	}
+	
+	.jumbotron h1 {
+		padding-bottom: 2rem;
+		font-weight: bold;
+	}
+	
+	div.apobox {
+		border: 1px solid #333;
+		margin: 1em 1em;
+		padding: 0.5em;
+	}
+	
+	div.apobox h3 {
+		/* background-color: #aaa;*/
+	}
+	
+		
+
+}

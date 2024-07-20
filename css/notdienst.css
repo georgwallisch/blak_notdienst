@@ -1,0 +1,46 @@
+@media all {
+
+	#left {
+		width: 22em;
+	}
+	#main {
+		margin-left: 22em;
+		margin-right: 22em;
+	} 
+		
+	/* ul.ndliste {display:inline;list-style-type:none;} */
+	li.ESB {background-color:yellow;}
+	li.WEN {background-color:green;}
+	li.WIN {background-color:blue;color:white;}
+	li.KEM {background-color:red;color:white;}
+		
+	table.ndliste td {border: 1px solid #333;width:75px;min-width:60px;padding:0;}
+		
+	.ndliste {
+		/* (en) containing floats in IE */
+		/* (de) Einfassen der Floats im IE */
+		width:100%;
+		overflow:hidden;
+		/* (en|de) Bugfix:IE - collapsing horizontal margins */
+		position:relative;
+	}
+
+	ul.ndliste  {
+		margin:0;
+		padding: 0.5em 1.5em;
+		/* (en|de) Bugfix:IE - Doubled Float Margin Bug */
+		display:inline;
+		float:left; /* LTR */
+	}
+
+	 ul.ndliste li {
+		/* (en|de) Bugfix:IE - Doubled Float Margin Bug */
+		display:inline;
+		float:left; /* LTR */
+		font-size:1.0em;
+		line-height:1em;
+		list-style-type:none;
+		margin: 0;
+		padding: 0.25em;
+	}
+}
