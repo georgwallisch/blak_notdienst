@@ -107,6 +107,57 @@ function getNotdienstUmkreis(location_id, range, day) {
 	return getNpResult('standort',params);
 }
 
+function getApoPlan(location_id, start_day, end_day) {
+	
+	console.log('Erzeuge individuellen Notdienstplan für '+location_id);
+	
+	var loc_id = getIndexById(locations, location_id);
+	var loc = locations[loc_id];
+
+	start_day = getParam(start_day, moment().dayOfYear(1));
+	end_day = getParam(end_day, moment().month(12).date(31));
+	
+	var action = 'apotheke';
+	var params = {
+		'drugstoreId':loc['drugstoreId'],
+		'fromDate':toMS(start_day),
+		'toDate':toMS(end_day),
+	};
+	
+	var dfd = $.Deferred();
+	
+	$.ajax({
+			'type': 'POST',
+			'url': api_url,
+			'data': {'action':'erstelleplan/'+action+'/ergebnis','jsondata':params},
+			'dataType':'html'			
+	}).done(function (data) {
+		
+		var html = $.parseHTML(data);
+		var result = [];
+		//var pattern = /[MoDiFrSa]{2}\. \d{2}\.\d{2}\.20\d{2}/i;
+		var pattern = /\d{2}\.\d{2}\.20\d{2}/i;
+				
+		console.log('Iteriere durch searchResultEntrys');
+		$(html).find('#searchResults td').each(function(entryIndex, entryValue) {
+			var res = $(entryValue).text().match(pattern);
+			if(Array.isArray(res)) {
+				/*result = result.concat(e);*/
+				for(let elem of res) {
+					var d = moment(elem, "DD.MM.YYYY");
+					result.push(d);
+				}
+			}
+		}).promise().then(function() {
+			result.sort(function(a, b){return a.diff(b)});
+			dfd.resolve(result);
+		});
+
+	});
+	
+	return dfd.promise();
+}
+
 function toMS(day, hour) {
 	
 	return moment(getParam(day, moment())).hour(getParam(hour, 0)).minute(0).second(0).millisecond(0).format('x');

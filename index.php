@@ -1,4 +1,7 @@
 <?php
+
+	header('Location: display.php');
+	exit(0);
 	
 	require_once 'bootstrap.php';
 	require_once 'config.php';
