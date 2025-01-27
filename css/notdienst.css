@@ -1,213 +1,64 @@
 @media all {
 
-	#left {
-		width: 22em;
+	h1 {
+		font-weight: bold;
+		text-align: center;
+		font-size: 3rem;
+		margin-bottom: 2.5rem;
 	}
-	#main {
-		margin-left: 22em;
-		margin-right: 22em;
+	
+	.subheader {
+		font-weight: bold;
+		color: grey;		
 	} 
-		
-	/* ul.ndliste {display:inline;list-style-type:none;} */
-	.nd_ESB {background-color:yellow;}
-	.nd_AEWEN, .nd_WEN {background-color:#33cc00;}
-	.nd_WESB, .nd_WIN {background-color:#3399ff;color:white;}
-	.nd_KEM {background-color:#ff6666;color:white;}
-		
-	table.ndliste td {border: 1px solid #333;width:75px;min-width:60px;padding:0;}
-		
-	.ndliste {
-		/* (en) containing floats in IE */
-		/* (de) Einfassen der Floats im IE */
-		width:100%;
-		overflow:hidden;
-		/* (en|de) Bugfix:IE - collapsing horizontal margins */
-		position:relative;
+	
+	h2 {
+		font-weight: bold;
+		font-size: 1.5rem;
+		margin-top: 0;
+		margin-bottom: 1rem;		
 	}
+	h3 {
+		font-weight: bold;
+		font-size: 1.15rem;
+		margin-bottom: 0;
+	}
+	div.apobox address {
+		margin-bottom: 0;
+	}
+	
+	div.distance {
+		display:none;
+	}
+	
+	div.notdiensttag {
+		border: 1px solid black !important;
+		margin-top: 1.5rem;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
+	}
+	
+	.dienstbereit h3 {
+		color: red !important;
+		font-weight: bold;
+	}
+	
+	div.footer {
+			padding: 0;
+			font-size: 0.8rem;
+			margin-top: 1rem;
+	}
+		
+}
 
-	ul.ndliste  {
-		margin:0;
-		padding: 0.5em 1.5em;
-		/* (en|de) Bugfix:IE - Doubled Float Margin Bug */
-		display:inline;
-		float:left; /* LTR */
-	}
+@media print {
 
-	 ul.ndliste li {
-		/* (en|de) Bugfix:IE - Doubled Float Margin Bug */
-		display:inline;
-		float:left; /* LTR */
-		font-size:1.0em;
-		line-height:1em;
-		list-style-type:none;
-		margin: 0;
-		padding: 0.25em;
-	}
-	
-    table.kalender td, table.kalender th {
-      /*  padding: 0.85em 0.75em 0.5em 0.75em; */
-      padding: 0;   	  
-    }
-    
-    table.kalender tbody, table.kalender tfoot {
-    	font-size: 85%;
-    }
-    
-    table.kalender tfoot {
-    	background: #eee !important;
-    }
-    
-    table.kalender td.holiday {
-    	background: #ff99ff !important;
-       /* z-index: -1; */
-    }
-    
-    table.kalender td.hotday {
-    	background-image: repeating-linear-gradient(135deg, white 0%, white 8%, #ff99ff 8%, #ff99ff 12%, white 12%);      
-    }
-    
-    table.kalender, table.kalender th, table.kalender td {
-    	border: 1px solid black;
-    	/* position: relative; */
-    	/* border-collapse: collapse; */
-    }
-    
-    div.date_content {
-    	width: 2.5em;
-    }
-    
-    div.nd_content {
-    	/*width: 4em;*/
-    }
-    
-    div.nd_location {
-    	
-    }
-    
-    .notdienstapo {
-		/* width: 0.5em; */
-		/*padding: 0.15em;*/
-		padding: 0 0.15em 0;
-		font-size: 85%;
-	}    
-        
-    div.nd_1 {
-    	width: 100%;
-    }
-    
-    div.nd_2 {
-    	width: 50%;
-    }
-    
-    div.nd_3 {
-    	width: 33%;
-    }
-    
-    div.nd_4 {
-    	width: 25%;
-    }
-        
-    div.date_content, div.nd_content, div.nd_location {
-    	display: inline-block;
-    	position: relative;
-    /*	padding: 0.15em 0.5em 0.15em 0.25em; */
-    	padding: 0;
-    }
-    
-    table.kalender td.odd_week {
-        /* background: #ffff99; */ 
-    	/* z-index: -1; */
-    }
-    
-    table.kalender td.week_other_year {
-        /* background: #ffcc99; */ 
-    	/* z-index: -1; */
-    }
-    
-    table.kalender td.not_a_day {
-        background: #ccc;
-        /* z-index: -1; */
-    }
-        
-    table.kalender td .dom_number, table.kalender td .dow_name {
-    	font-size: 85%;
-    	padding-right: 0.25em;
-    	/* z-index: 1; */
-    }     
+  .container {
+  	  min-width: 0 !important;
+  }
+  
+  div.notdiensttag {
+	border: 2px solid black !important;
+  }
 
-    table.kalender th, table.kalender td {
-    	width: 8.33%;
-    }
-    
-    .table ul {    
-    	margin-bottom: 0;
-    }
-    
-    .is_null, .delta_null {
-    	color: lightgrey !important;    
-    	font-weight: normal !important;
-    }
-    
-     .delta_negativ {
-    	color: red !important;
-    }
-    
-    .delta_null::before {
-    	content: '±';
-    }
-    
-    .delta_positiv::before {
-    	content: '+';
-    }
-    
-    .inactive {
-    	color: #aaa;
-    	font-style:italic;    
-    }
-    
-    table.kalender td.dow_sa {
-    	font-weight: bold;
-    	background-color: #ffebb2;
-    }
-    
-    table.kalender td.dow_so {
-    	font-weight: bold;
-    	background-color: #ffde7f;
-    }    
-    
-    table.kalender td.heute {
-    	border: 2px solid red;
-        /* z-index: -1; */
-    }
-    
-    table.tablesorter thead tr .header {
-		background-image: url(https://intern.schug-gruppe.de/js/tablesorter/themes/blue/bg.gif);
-		background-repeat: no-repeat;
-		background-position: center right;
-		cursor: pointer;
-	}
-		
-	table.tablesorter thead tr .headerSortUp {
-		background-image: url(https://intern.schug-gruppe.de/js/tablesorter/themes/blue/asc.gif);
-	}
-	
-	table.tablesorter thead tr .headerSortDown {
-		background-image: url(https://intern.schug-gruppe.de/js/tablesorter/themes/blue/desc.gif);
-	}
-	
-	.table {
-    	width:auto;
-    }
-    
-    .overtime {
-    	color: #990000;
-    	font-weight: bold;    
-    }
-    
-    .undertime {
-    	color: #000099;
-    	font-weight: bold;    
-    }
-	
-	
 }

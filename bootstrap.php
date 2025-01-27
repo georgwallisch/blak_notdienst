@@ -20,21 +20,20 @@ $bootstrap_config_defaults['path'] =  '/bootstrap/';
 $bootstrap_config_defaults['js_path'] = $bootstrap_config_defaults['css_path'] = '/js/';
 
 
-$bootstrap_config_defaults['jquery_js_version'] = '3.6.0';
+$bootstrap_config_defaults['jquery_js_version'] = '3.7.1';
 $bootstrap_config_defaults['jquery_js_dir'] = 'jquery-';
 $bootstrap_config_defaults['jquery_js_file'] = '.min.js';
-$bootstrap_config_defaults['jquery_js_integrity'] = 'sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK';
+$bootstrap_config_defaults['jquery_js_integrity'] = 'sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs';
 $bootstrap_config_defaults['jquery-ui_js_dir'] = $bootstrap_config_defaults['jquery-ui_css_dir'] = 'jquery-ui-1.13.0.custom/';
 $bootstrap_config_defaults['jquery-ui_css_integrity'] = 'sha384-8mv+EdwtnOCaUtnx36+KcuDVM0FRQ8cTdA6kqCZXbJWr1i2FC3x31Bhl2MG1gZdE';
 $bootstrap_config_defaults['jquery-ui_js_integrity'] = 'sha384-wjHrTJpOKGCAKZrtQ91chBNFhgX2FABFT5uqMIyby8Ms1BxWKIU6T25KvWURp1s3';
 $bootstrap_config_defaults['jquery-ui-i18n_js_dir'] = 'jquery-ui-i18n/';
 $bootstrap_config_defaults['jquery-ui-i18n_js_file'] = 'datepicker-de.js';
 $bootstrap_config_defaults['jquery-ui-i18n_js_integrity'] = 'sha384-NPnUv15Ub9lg3oIQmHmHanS5jJfuY3N+gKWRixQmbbQELD+uB47cn5F55VaRSs8k';
-$bootstrap_config_defaults['moment_js_version'] = '2.29.1/';
+$bootstrap_config_defaults['moment_js_version'] = 'latest/';
 $bootstrap_config_defaults['moment_js_dir'] = 'momentjs/';
 $bootstrap_config_defaults['moment_js_file'] = 'moment-with-locales.min.js';
-$bootstrap_config_defaults['moment_js_integrity'] = 'sha384-IFyOtsSJQkqd1kMlhelCNzXIOub/YQewnLE43aaVvkbMDQMBbg7WApLMjn9yuW9M';
-
+//$bootstrap_config_defaults['moment_js_integrity'] = 'sha384-IFyOtsSJQkqd1kMlhelCNzXIOub/YQewnLE43aaVvkbMDQMBbg7WApLMjn9yuW9M';
 
 $bootstrap_config_defaults['er'] = 0;
 $bootstrap_config_defaults['er_dev'] = E_ALL & ~E_NOTICE;
@@ -208,7 +207,9 @@ function bootstrap_foot() {
 			if(is_string($k)) {
 				$s[] = '<!-- '.htmlspecialchars($k).' -->';
 			}
-			$s[] =  bootstrap_js($v);
+			if(is_string($v)) {
+				$s[] =  bootstrap_js($v);
+			}
 		}
 	}
 

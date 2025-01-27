@@ -3,14 +3,16 @@
 function showNotdienstStandort(location_id, max) {
 
 	max = getParam(max, 3);
+	const today = moment();
+	console.log('Heute ist '+today.format('dddd, DD.MM.YYYY'));
+	
+	const apo = getSomethingById(locations, location_id);
+	const apo_name = apo['name'];
+	const apo_ort = apo['location'];
+	
 	var main = $('main');
 	
 	main.empty();
-	/*
-	$('<h3>',).text(apo_name + ' – ' + apo_ort).appendTo(main);
-	*/
-	/*{'class':'display-2'}*/
-	
 	
 	var datumElem =	$('<h1>',{'id':'DatumUhrzeit', 'class':'DatumUhrzeit'}).appendTo(main);
 		
@@ -20,8 +22,6 @@ function showNotdienstStandort(location_id, max) {
 	}, 3000);	
 	
 	var box = $('<div>', {'class':'container'}).appendTo($('<div>', {'class':'jumbotron'}).appendTo(main));
-	/*{'class':'display-3'}*/
-	/* $('<h1>').text('Notdienst am ' + day.format('dddd, DD.MM.YYYY')).appendTo(box); */
 	
 	if(typeof nd_qr != 'undefined') {
 		$('<img>', {'src':nd_qr, 'class':'float-right', 'width':'120', 'height':'120'}).appendTo(box);
@@ -33,8 +33,6 @@ function showNotdienstStandort(location_id, max) {
 			
 			debug2box(res,'NotdienstData',4);
 						
-			let heute = moment();
-	
 			var row = $('<div>', {'class':'row'}).appendTo(box);
 			
 			console.log('Ergebnistyp ist ' + res['type']);
@@ -47,21 +45,10 @@ function showNotdienstStandort(location_id, max) {
 						
 			for(let e of liste) {
 
-				if(heute.isBetween(e['from'],e['to'])) {
+				if(today.isBetween(e['from'],e['to'])) {
 					n = n + 1;
-					var elem = $('<div>', {'class':'col apobox'}).appendTo(row);
-					$('<h3>').text(e['name']).appendTo(elem);
-					$('<address>').html(e['street'] + '<br /><strong>' + e['zipCode'] + '&nbsp;' + e['location'] + '</strong>').appendTo(elem);
-					$('<div>', {'class':'phone'}).text('Telefon: ' + e['phone']).appendTo(elem);
-					if(apo_name == e['name'] && e['location'] == apo_ort) {
-						elem.addClass('dienstbereit');
-					}
-					dist = calcDistance(lat, lon, e['lat'], e['lon']);
-					if(dist > 3.0) {
-						$('<div>', {'class':'distance'}).text('Entfernung ca. ' + Math.round(dist) + ' km').appendTo(elem);
-					}
-					//console.log('Entfernung zur ' + e['name'] + ' ist ' + dist + ' km');
-
+					var abox = apobox(e,lat,lon).addClass('col').appendTo(row);
+					setDienstbereit(abox, e, apo_name, apo_ort);
 				} else {
 					console.log(e['name'] + ' ' + e['location'] + ' hat heute nicht dienst.');
 				}

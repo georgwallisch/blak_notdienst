@@ -1,13 +1,11 @@
 <?php
 
-	header('Location: display.php');
-	exit(0);
-	
 	require_once 'bootstrap.php';
 	require_once 'config.php';
 	
 	$bootstrap_config['local_js'][]  = 'js/notdienst.js';
-	
+	$bootstrap_config['local_css'][]  = 'css/notdienst.css';
+
 	bootstrap_head($title);
 	
 ?>
@@ -26,7 +24,6 @@
 
 <main id="mainbox" role="main" class="container">
 </main>
-
 
 <?php
 	bootstrap_foot();

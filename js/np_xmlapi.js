@@ -108,8 +108,9 @@ function add_navbar_item(parent_ul, text, li_attribs, a_attribs) {
 	return a;
 }
 
-function activateBox(boxname, header, force_refresh) {
+function activateBox(boxname, header, force_refresh, header_tag) {
 	
+	header_tag = getParam(header_tag, '<h1>');
 	console.log('Aktiviere Box '+boxname);
 	
 	$('.databox').hide();
@@ -124,7 +125,7 @@ function activateBox(boxname, header, force_refresh) {
 	if(refresh || !box.length) {
 		box = $('<div>', {'id':boxname, 'class':'databox'}).appendTo('#mainbox');
 		if(typeof header == 'string') {
-			$('<h2>').appendTo(box).append(header);
+			$(header_tag).appendTo(box).append(header);
 		}
 		//box.hide();
 		return box;
@@ -156,4 +157,36 @@ function calcDistanceHaversine(lat1, lon1, lat2, lon2) {
 	let dist = 6378.388 * 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0-a));
 	
 	return dist;
+}
+
+function apobox(e, lat, lon, mindist) {
+	
+	mindist = getParam(mindist, 3.0);
+	
+	var elem = $('<div>', {'class':'apobox'});
+	$('<h3>').text(e['name']).appendTo(elem);
+	$('<address>').html(e['street'] + '<br /><strong>' + e['zipCode'] + '&nbsp;' + e['location'] + '</strong>').appendTo(elem);
+	$('<div>', {'class':'phone'}).text('Telefon: ' + e['phone']).appendTo(elem);
+
+	if(!isNaN(lat) && !isNaN(lon)) {
+		dist = calcDistance(lat, lon, e['lat'], e['lon']);
+		if(dist > mindist) {
+			$('<div>', {'class':'distance'}).text('Entfernung ca. ' + Math.round(dist) + ' km').appendTo(elem);
+		}
+	}
+	
+	return elem;
+}
+
+function setDienstbereit(elem, e, apo_name, apo_ort) {
+	if(typeof elem != 'object') {
+		console.log('Prüfung auf Dienstbereitschaft: Kein jQuery-Object!');
+		return false;		
+	}
+	
+	if(apo_name == e['name'] && e['location'] == apo_ort) {		
+		elem.addClass('dienstbereit');
+	} else {
+	//	console.log('Prüfung auf Dienstbereitschaft: Soll: '+apo_name + ', '+apo_ort+' Ist: ',e['name'] +', '+e['location']);
+	}
 }
