@@ -32,10 +32,10 @@
 	}
 	
 	div.notdiensttag {
-		border: 1px solid black !important;
+		border: 2px solid black !important;
 		margin-top: 1.5rem;
-		padding-top: 0.5rem;
-		padding-bottom: 0.5rem;
+		padding: 0.5rem 1rem;
+		page-break-inside: avoid;
 	}
 	
 	.dienstbereit h3 {
@@ -52,13 +52,18 @@
 }
 
 @media print {
+/*
+	@page {
+		size: A4;
+		margin:15mm;
+	}
+		
+	body, main.container {
+		width: 180mm !important;
+		min-width: 180mm !important;
+		max-width: 180mm !important;
 
-  .container {
-  	  min-width: 0 !important;
-  }
-  
-  div.notdiensttag {
-	border: 2px solid black !important;
-  }
-
+		height: 267mm;
+	}
+*/
 }

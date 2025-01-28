@@ -12,6 +12,8 @@
 <div id="headline" class="container"></div>
 <main id="mainbox" role="main" class="container">
 </main>
+<footer class="container">  
+</footer>
 <?php
 	bootstrap_foot();
 ?>
