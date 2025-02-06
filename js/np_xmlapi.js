@@ -164,7 +164,7 @@ function apobox(e, lat, lon, mindist) {
 	mindist = getParam(mindist, 3.0);
 	
 	var elem = $('<div>', {'class':'apobox'});
-	$('<h3>').text(e['name']).appendTo(elem);
+	$('<h4>').text(e['name']).appendTo(elem);
 	$('<address>').html(e['street'] + '<br /><strong>' + e['zipCode'] + '&nbsp;' + e['location'] + '</strong>').appendTo(elem);
 	$('<div>', {'class':'phone'}).text('Telefon: ' + e['phone']).appendTo(elem);
 

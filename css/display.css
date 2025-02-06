@@ -46,6 +46,11 @@
 		/* background-color: #aaa;*/
 	}
 	
+	div.apobox h4 {
+		font-weight: bold;
+		
+	}
+	
 	.dienstbereit h3 {
 		color: red !important;
 		font-weight: bold;
