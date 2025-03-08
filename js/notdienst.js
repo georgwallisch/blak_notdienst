@@ -10,7 +10,7 @@ function showNotdienstplan(location_id, max_n, max_d) {
 	console.log('Anzeigt werden sollen max. '+max_n+' Apotheken und max. '+max_d+' Tage');
 	console.log('Also max bis '+maxday.format('dddd, DD.MM.YYYY'));
 	
-	var box = activateBox('notdienstplan_'+location_id, 'Notdienstbereite Apotheken', true);
+	var box = activateBox('notdienstplan_'+location_id, 'Notdienstbereite Apotheken', true, null, true);
 	
 	const apo = getSomethingById(locations, location_id);
 	const apo_name = apo['name'];
@@ -36,11 +36,17 @@ function showNotdienstplan(location_id, max_n, max_d) {
 			let lat = res['lat'];
 			let lon = res['lon'];
 			
+			debug2box(liste,'Notdienstliste',3);
 			
 			for(let e of liste) {
 				
 				if(e['from'].isAfter(maxday)) {
 					console.log(e['from'].format('DD.MM.YYYY')+' liegt NACH dem '+maxday.format('DD.MM.YYYY')); 
+					continue;				
+				}
+				
+				if(e['to'].isBefore(today)) {
+					console.log(e['to'].format('DD.MM.YYYY')+' liegt in der Vergangenheit!'); 
 					continue;				
 				}
 				
@@ -81,6 +87,10 @@ function showNotdienstplan(location_id, max_n, max_d) {
 }
 
 $(document).ready(function() {
+		
+	const main = $('#mainbox');
+	main.empty();
+	$('<div>',{'id':'debugbox','class':'container','role':'note'}).insertAfter(main);
 
 	var main_nav = $('#main_nav > div > ul');
 		
@@ -92,6 +102,6 @@ $(document).ready(function() {
 		});
 	}	
 	
-	showNotdienstplan(apo_id);
+	getApoID(showNotdienstplan);
 		
 });

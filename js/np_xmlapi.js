@@ -24,7 +24,7 @@ function getNotdienstData(location_id) {
 			let result = {};
 			let list = [];
 			
-			result['created'] = moment(container['created']);
+			result['created'] = moment.utc(container['created']).local();
 			let descr = container['descr'].split(':');
 			result['type'] = descr[0].trim();
 			let coords = descr[1].split(',');
@@ -35,8 +35,8 @@ function getNotdienstData(location_id) {
 			
 			for(var i = 0; i < entries.length; ++i) {
 				entry = entries[i];
-				entry['from'] = moment(entry['from']);
-				entry['to'] = moment(entry['to']);
+				entry['from'] = moment.utc(entry['from']).local();
+				entry['to'] = moment.utc(entry['to']).local();
 				entry['lat'] = Number.parseFloat(entry['lat']);
 				entry['lon'] = Number.parseFloat(entry['lon']);
 
@@ -108,21 +108,22 @@ function add_navbar_item(parent_ul, text, li_attribs, a_attribs) {
 	return a;
 }
 
-function activateBox(boxname, header, force_refresh, header_tag) {
+function activateBox(boxname, header, force_refresh, header_tag, hideall) {
 	
 	header_tag = getParam(header_tag, '<h1>');
 	console.log('Aktiviere Box '+boxname);
-	
-	$('.databox').hide();
-	var box = $('#'+boxname);
-	var refresh = false;
-	
-	if(typeof force_refresh != 'undefined' && force_refresh === true) {
-		box.remove();
-		refresh = true;		
+		
+	if(getParam(hideall, false)) {
+		$('.databox').hide();
 	}
+	
+	var refresh = getParam(force_refresh, false);
+	var box = $('#'+boxname);
 		
 	if(refresh || !box.length) {
+		if(box.length) {
+			box.remove();
+		}
 		box = $('<div>', {'id':boxname, 'class':'databox'}).appendTo('#mainbox');
 		if(typeof header == 'string') {
 			$(header_tag).appendTo(box).append(header);
@@ -188,5 +189,20 @@ function setDienstbereit(elem, e, apo_name, apo_ort) {
 		elem.addClass('dienstbereit');
 	} else {
 	//	console.log('Prüfung auf Dienstbereitschaft: Soll: '+apo_name + ', '+apo_ort+' Ist: ',e['name'] +', '+e['location']);
+	}
+}
+
+function getApoID(callBackFunc) {
+	
+	if(typeof apo_id == 'undefined') {
+		$.ajax({
+			'url':ipinfourl,
+			'method': 'GET'
+		}).done(function (data) {
+			var apo_id = data['id'];	
+			callBackFunc(apo_id);
+		});	
+	} else {
+		callBackFunc(apo_id);
 	}
 }

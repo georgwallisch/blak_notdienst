@@ -34,3 +34,4 @@ const katholic = true;
 
 const disclaimer = 'Der Apotheken-Notdienstplan der örtlichen Apotheken in Bayern wird durch die Bayerische Landesapothekerkammer, Maria-Theresia-Str. 28, 81675 München zur Verfügung gestellt. Bitte beachten Sie das dortige Impressum, den Haftungsausschluss und die Datenschutzhinweise der Bayerischen Landesapothekerkammer.';
 const disclaimer_qr = 'img/blak-url.png';
+const ipinfourl = 'http://10.66.167.88/lib/ip-info.php';

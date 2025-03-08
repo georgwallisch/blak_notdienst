@@ -1,6 +1,6 @@
 "use strict";
 
-function showNotdienstStandort(location_id, day, max) {
+function showNotdiensteStandort(location_id, day, max) {
 
 	const today = moment();
 	max = getParam(max, 3);
@@ -58,18 +58,14 @@ function showNotdienstStandort(location_id, day, max) {
 				box.remove();	
 			}, ttl);
 			setTimeout(function () {
-				showNotdienstStandort(location_id, day.add(1, 'days'), max);		
+				showNotdiensteStandort(location_id, day.add(1, 'days'), max);		
 			}, ttl - 30*60*1000);
 	});
 	
 }
 
-$(document).ready(function() {
-/*	
-	if(typeof apo_id == 'undefined') {
-		var apo_id = 'KEM';
-	}	
-*/	
+function showNotdienstplan(apo_id) {
+	
 	const apo = getSomethingById(locations, apo_id);
 
 	$('body').addClass('loc_' + apo_id);
@@ -81,24 +77,12 @@ $(document).ready(function() {
 	
 	const datumElem = $('<div>',{'id':'DatumUhrzeit', 'class':'DatumUhrzeitInfo'}).appendTo(apo_info);
 	
-	const main = $('#mainbox');
-	main.empty();
-	
-	$('<div>',{'id':'debugbox','class':'container','role':'note'}).insertAfter(main);
-	
-	//var datumElem =	$('<h1>',{'id':'DatumUhrzeit', 'class':'DatumUhrzeit'}).appendTo(main);
-		
 	var datumsanzeige = setInterval(function() {
 		var d = moment().format('HH:mm [Uhr]'); //format('dddd, DD.MM.YYYY HH:mm');
 		datumElem.text(d);		
 	}, 3000);
 
-
-	// var heute = moment().format('x');
-	//var morgen = toMS(moment().add(1, 'days'),8);
-	//	var refresher;
-		
-	showNotdienstStandort(apo_id);
+	showNotdiensteStandort(apo_id);
 	const footer = $('footer');
 	const disdiv = $('<div>', {'id':'disclaimer', 'class':'alert alert-dark', 'role':'alert'}).appendTo(footer);
 	
@@ -107,15 +91,14 @@ $(document).ready(function() {
 	}
 	
 	$('<p>').appendTo(disdiv).text(disclaimer);
+}
+
+$(document).ready(function() {
+
+	const main = $('#mainbox');
+	main.empty();
+	$('<div>',{'id':'debugbox','class':'container','role':'note'}).insertAfter(main);
 	
-/*	
-	setTimeout(function () {
-			showNotdienstStandort(apo_id);
-		
-			refresher = setInterval(function () {
-					showNotdienstStandort(apo_id);
-			},1000*24*3600);
-	}, (morgen-heute));
-		
-*/			
+	getApoID(showNotdienstplan);
+	
 });
