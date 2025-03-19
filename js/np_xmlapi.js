@@ -110,7 +110,7 @@ function add_navbar_item(parent_ul, text, li_attribs, a_attribs) {
 
 function activateBox(boxname, header, force_refresh, header_tag, hideall) {
 	
-	header_tag = getParam(header_tag, '<h1>');
+	header_tag = getParam(header_tag, '<h1>', true);
 	console.log('Aktiviere Box '+boxname);
 		
 	if(getParam(hideall, false)) {
@@ -187,8 +187,13 @@ function setDienstbereit(elem, e, apo_name, apo_ort) {
 	
 	if(apo_name == e['name'] && e['location'] == apo_ort) {		
 		elem.addClass('dienstbereit');
+		if(debug_mode) {
+			console.log('Prüfung auf Dienstbereitschaft: '+apo_name + ', '+apo_ort+' hat Dienst');
+		}
 	} else {
-	//	console.log('Prüfung auf Dienstbereitschaft: Soll: '+apo_name + ', '+apo_ort+' Ist: ',e['name'] +', '+e['location']);
+		if(debug_mode) {
+			console.log('Prüfung auf Dienstbereitschaft: Soll: '+apo_name + ', '+apo_ort+' Ist: ',e['name'] +', '+e['location']);
+		}
 	}
 }
 

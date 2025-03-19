@@ -56,14 +56,14 @@ function showNotdienstplan(location_id, max_n, max_d) {
 											
 				var row_id = 'row_'+tag_id;
 				var row = $('#'+row_id);
-				
+				/*
 				if(!tag.length) {
 					tag = $('<div>',{'id':tag_id,'class':'notdiensttag'}).appendTo(container);
 					//$('<h2>').append(e['from'].format('dddd, DD. MMMM YYYY')).appendTo(tag);			
 				}
-				
+			*/
 				if(!row.length) {
-					row = $('<div>',{'id':row_id, 'class':'row notdiensteintrag'}).appendTo(tag);
+					row = $('<div>',{'id':row_id, 'class':'row notdiensttag'}).appendTo(container);
 					$('<h3>').append(e['from'].format('[<span class="dayofweek">]dddd[</span>] [<span class="dayofmonth">]D.[</span>] [<span class="month">]MMM[</span>] [<span class="year">]YYYY[</span>]')).appendTo($('<div>',{'class':'col-2 notdienstdatum'}).appendTo(row));
 				}
 								

@@ -49,6 +49,10 @@
 	div.notdienstdatum .month, div.notdienstdatum .dayofmonth {
 		display: inline;
 	}
+
+	div.apobox {
+		padding: 0.5rem 1rem;
+	}
 	
 	div.apobox address {
 		margin-bottom: 0;
@@ -61,11 +65,15 @@
 	div.notdiensttag {
 		border: 2px solid black !important;
 		margin-top: 1.5rem;
-		padding: 0.5rem 1rem;
+		padding: 0;
 		page-break-inside: avoid;
 	}
 	
-	.dienstbereit h3 {
+	div.dienstbereit {
+		border: 0.25em solid red;
+	}
+	
+	div.dienstbereit h4 {
 		color: red !important;
 		font-weight: bold;
 	}

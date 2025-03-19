@@ -2,10 +2,14 @@
 
 /* Allgemeine Funktionen */
 
-function getParam(param, defaultvalue, mustbesametypeasdefault) {
+function getParam(param, defaultvalue, notnull, mustbesametypeasdefault) {
 	
 	if(typeof defaultvalue == 'undefined') {
 		defaultvalue = null;
+	}
+ 	
+	if(typeof notnull == 'undefined') {
+		notnull = false;
 	} 	
 	
 	if(typeof mustbesametypeasdefault == 'undefined') {
@@ -14,9 +18,13 @@ function getParam(param, defaultvalue, mustbesametypeasdefault) {
 	
 	if(typeof param == 'undefined') {
 		param = defaultvalue;
-	} else if(mustbesametypeasdefault) {
-		if(typeof param != typeof defaultvalue) {
+	} else {
+		if(param === null && notnull) {
 			param = defaultvalue;
+		} else if(mustbesametypeasdefault) {
+			if(typeof param != typeof defaultvalue) {
+				param = defaultvalue;
+			}
 		}
 	}
 	
