@@ -58,7 +58,7 @@ function showNotdiensteStandort(location_id, day, max) {
 				box.remove();	
 			}, ttl);
 			setTimeout(function () {
-				showNotdiensteStandort(location_id, day.add(1, 'days'), max);		
+				vshowNotdiensteStandort(location_id, day.add(1, 'days'), max);		
 			}, ttl - 30*60*1000);
 	});
 	
@@ -93,12 +93,67 @@ function showNotdienstplan(apo_id) {
 	$('<p>').appendTo(disdiv).text(disclaimer);
 }
 
+function showOverlay(apo_id) {
+	
+	const data = getSomethingById(overlay_data, apo_id);
+	
+	if(typeof data != 'object') {
+		console.log('Keine Overlay-Definition für '+apo_id);
+		return;
+	}
+	
+	console.log('Bereite Overlay-Definition für '+apo_id);
+	
+	var overlay = $('#overlay_box');
+	
+	if(!overlay.length)	{
+		overlay = $('<div>',{'class':'overlay', 'id':'overlay_box'}).insertBefore($('#headline')).hide();
+	} else {
+		overlay.hide();
+	}
+	
+	var overlay_content = $('#overlay_content');
+	
+	if(!overlay_content.length) {
+		overlay_content = $('<div>',{'class':'overlay-content ', 'id':'overlay_content'}).appendTo(overlay);
+	}
+		
+	var images = data['images'];
+		
+	var n = images.length; 
+	var x = Math.floor(Math.random() * n);
+	var image = images[x];
+	
+	var overlay_image = $('#overlay_image');
+	
+	if(!overlay_image.length) {
+		 overlay_image = $('<img>', {'class':'overlay-image', 'id':'overlay_image'}).attr('src','img/'+apo_id+'/'+image).appendTo(overlay_content);
+	} else {
+		overlay_image.attr('src','img/'+apo_id+'/'+image);
+	}
+	
+	setTimeout(function() {
+		console.log('Overlay-Definition startet in '+overlay_period+' Sekunden');
+
+		overlay.show('slow');
+
+		setTimeout(function() {
+				overlay.remove();
+				showOverlay(apo_id);
+		}, overlay_duration * 1000);		
+
+	}, overlay_period * 1000);	
+}
+
 $(document).ready(function() {
 
 	const main = $('#mainbox');
 	main.empty();
 	$('<div>',{'id':'debugbox','class':'container','role':'note'}).insertAfter(main);
 	
-	getApoID(showNotdienstplan);
+	getApoID(function(apo_id) {
+			showNotdienstplan(apo_id);
+			showOverlay(apo_id);
+	});
 	
 });

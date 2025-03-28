@@ -1,0 +1,49 @@
+"use strict";
+/*
+let debug_mode = false;
+let admin_mode = false;
+*/
+
+/*
+const nd_url = 'https://lak-bayern.notdienst-portal.de/blakportal/';
+const api_url = 'np_api.php';
+*/
+
+//const nd_qr = 'img/ndportal-url.png';
+
+const api_urls = [
+	{'id':'APO1','url':'https://notdienst.sberg.net/api/apipub/notdienst/xmlschnittstelle/XX'},
+	{'id':'APO2','url':'https://notdienst.sberg.net/api/apipub/notdienst/xmlschnittstelle/XX'},
+];
+
+const locations = [
+	{'id':'APO1', 'name': 'Apotheke 1', 'plz':'92676', 'street':'Karlsplatz 10', 'location':'Eschenbach', 'lat':49.754469, 'lon':11.830417799999964},
+	{'id':'APO2', 'name': 'Apotheke 2', 'plz':'92670', 'street':'Hauptstraße 64', 'location':'Windischeschenbach', 'lat':49.7988978, 'lon':12.156768100000022},	
+];
+
+moment.locale('de');
+
+const wochentage =  moment.weekdays(); /* ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']; */
+const wtage = moment.weekdaysShort(); /* ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']; */
+const defaultrange = 20;
+const katholic = true;
+
+const disclaimer = 'Der Apotheken-Notdienstplan der örtlichen Apotheken in Bayern wird durch die Bayerische Landesapothekerkammer, Maria-Theresia-Str. 28, 81675 München zur Verfügung gestellt. Bitte beachten Sie das dortige Impressum, den Haftungsausschluss und die Datenschutzhinweise der Bayerischen Landesapothekerkammer.';
+const disclaimer_qr = 'img/blak-url.png';
+const ipinfourl = 'http://10.66.167.88/lib/ip-info.php';
+
+const overlay_duration = 10; //Sekunden
+const overlay_period = 10; //Sekunden
+
+const overlay_data = [
+	{'id':'APO1','images':[
+			'amamed-Digitale-Werbebanner-1080x1920px-Full-HD-quer-FINAL-01.jpg',
+			'amamed-Digitale-Werbebanner-1080x1920px-Full-HD-quer-FINAL-02.jpg',
+			'amamed-Digitale-Werbebanner-1080x1920px-Full-HD-quer-FINAL-03.jpg',
+			'amamed-Digitale-Werbebanner-1080x1920px-Full-HD-quer-FINAL-04.jpg'			
+	]}	
+];
+
+const banner_data = [
+	{'id':'APO1','image':'amamed-App-Banner-1500x350px-Variante-3.jpg', 'qrcode':'amamed_qr_kem.png'}
+];

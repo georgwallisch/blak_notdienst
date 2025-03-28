@@ -60,6 +60,30 @@
 		margin-top:0.5em;
 	}
 	
-		
+	.overlay {
+		/* Height & width depends on how you want to reveal the overlay (see JS below) */   
+		height: 100%;
+		width: 100%;
+		position: fixed; /* Stay in place */
+		z-index: 2000; /* Sit on top */
+		left: 0;
+		top: 0;
+		background-color: white;
+		padding: 0 100px 0;
+	}
+	
+	
+	/* Position the content inside the overlay */
+	.overlay-content {
+		  position: relative;
+		  width: 100%; /* 100% width */
+		  text-align: center; /* Centered text/links */
+	}
+	
+	.overlay-content img {
+		max-width: 100%;
+		width: auto;
+		max-height: 100%;
+	}
 
 }
