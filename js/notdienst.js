@@ -19,8 +19,11 @@ function showNotdienstplan(location_id, max_n, max_d) {
 	$('<button>', {'type':'button','class':'btn btn-primary float-right d-print-none'}).append('Plan drucken').appendTo(box).click(function(){
 			window.print();
     });
+
+    $('<h2>', {'id':'timeinfo_'+location_id, 'class':'subheader d-none d-print-block'}).appendTo(box);
+    $('<h2>', {'id':'apoinfo_'+location_id, 'class':'subheader d-print-none'}).append('für '+apo_name).appendTo(box);
     
-    $('<h2>', {'class':'subheader d-print-none'}).append('für '+apo_name).appendTo(box);
+    var timeofbegin;
 	
 	const container = $('<div>', {'id':'notdienstliste_'+location_id, 'class':'notdienstcontainer'}).appendTo(box);
 	
@@ -48,6 +51,11 @@ function showNotdienstplan(location_id, max_n, max_d) {
 				if(e['to'].isBefore(today)) {
 					console.log(e['to'].format('DD.MM.YYYY')+' liegt in der Vergangenheit!'); 
 					continue;				
+				}
+				
+				if(typeof timeofbegin != 'string') {
+					timeofbegin = e['from'].format('HH:mm');
+					$('#'+'timeinfo_'+location_id).append('Notdienstbereitschaft von ' + timeofbegin + ' Uhr bis ' + timeofbegin + ' Uhr des darauffolgendes Tages'); 
 				}
 				
 				var ndtag = e['from'].format('YYYYMMDD');
