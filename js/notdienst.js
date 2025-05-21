@@ -55,7 +55,7 @@ function showNotdienstplan(location_id, max_n, max_d) {
 				
 				if(typeof timeofbegin != 'string') {
 					timeofbegin = e['from'].format('HH:mm');
-					$('#'+'timeinfo_'+location_id).append('Notdienstbereitschaft von ' + timeofbegin + ' Uhr bis ' + timeofbegin + ' Uhr des darauffolgendes Tages'); 
+					$('#'+'timeinfo_'+location_id).append('Notdienstbereitschaft von ' + timeofbegin + ' Uhr bis ' + timeofbegin + ' Uhr des darauffolgenden Tages'); 
 				}
 				
 				var ndtag = e['from'].format('YYYYMMDD');
