@@ -1,5 +1,46 @@
 "use strict";
 
+var resultcache = null;
+
+function showNotdienstRow(res, box, day, apo, max) {
+	
+	const apo_name = apo['name'];
+	const apo_ort = apo['location'];
+	
+	var endofduty;					
+	var row = $('<div>', {'class':'row'}).appendTo(box);
+	
+	console.log('Ergebnistyp ist ' + res['type']);
+	
+	let liste = res['entries'];
+	let lat = res['lat'];
+	let lon = res['lon'];
+	let n = 0;
+	var dist;
+				
+	for(let e of liste) {
+
+		if(day.isBetween(e['from'],e['to'])) {
+			if(typeof endofduty == 'undefined') {
+				endofduty = e['to'];
+			}
+			n = n + 1;
+			var abox = apobox(e,lat,lon).addClass('col').appendTo(row);
+			setDienstbereit(abox, e, apo_name, apo_ort);
+		} else {
+			console.log(e['name'] + ' ' + e['location'] + ' hat heute nicht Dienst.');
+		}
+		
+		if(n >= max) break; 
+	}
+	
+	$('<h5>').append('bis '+endofduty.format('dddd, DD.MM.YYYY HH:mm [Uhr]')).insertBefore(row);
+	
+	var ttl = endofduty.format('x') - moment().format('x');
+	
+	return ttl;		
+}
+
 function showNotdiensteStandort(location_id, day, max) {
 
 	const today = moment();
@@ -10,8 +51,6 @@ function showNotdiensteStandort(location_id, day, max) {
 	
 	const day_id = day.format('YYYYMMDD');
 	const apo = getSomethingById(locations, location_id);
-	const apo_name = apo['name'];
-	const apo_ort = apo['location'];
 	
 	var box = activateBox('notdienstbox_'+day_id,'Notdienstbereite Apotheken am '+day.format('dddd, DD.MM.YYYY'), true);
 	
@@ -24,42 +63,44 @@ function showNotdiensteStandort(location_id, day, max) {
 	
 	getNotdienstData(location_id).done(function(res) {
 			
-			debug2box(res,'NotdienstData',4);
-			var endofduty;					
-			var row = $('<div>', {'class':'row'}).appendTo(box);
+		debug2box(res,'NotdienstData',4);
+		
+		var ttl = showNotdienstRow(res, box, day, apo, max);
+		
+		resultcache = res;
+		
+		setTimeout(function () {
+			box.remove();	
+		}, ttl);
+		
+		setTimeout(function () {
+			showNotdiensteStandort(location_id, day.add(1, 'days'), max);		
+		}, ttl - 30*60*1000);
+		
+	}).fail(function() {
+		
+		console.log('AJAX Request failed!');
+		
+		if(typeof resultcache != 'Object') {
+			console.log('No Request in cache.. merde!!');
 			
-			console.log('Ergebnistyp ist ' + res['type']);
-			
-			let liste = res['entries'];
-			let lat = res['lat'];
-			let lon = res['lon'];
-			let n = 0;
-			var dist;
+			setTimeout(function () {
+				showNotdiensteStandort(location_id, day, max);		
+			}, 30*60*1000);	
 						
-			for(let e of liste) {
-
-				if(day.isBetween(e['from'],e['to'])) {
-					if(typeof endofduty == 'undefined') {
-						endofduty = e['to'];
-					}
-					n = n + 1;
-					var abox = apobox(e,lat,lon).addClass('col').appendTo(row);
-					setDienstbereit(abox, e, apo_name, apo_ort);
-				} else {
-					console.log(e['name'] + ' ' + e['location'] + ' hat heute nicht Dienst.');
-				}
-				
-				if(n >= max) break; 
-			}
+		} else {
+			var ttl = showNotdienstRow(resultcache, box, day, apo, max);
 			
-			$('<h5>').append('bis '+endofduty.format('dddd, DD.MM.YYYY HH:mm [Uhr]')).insertBefore(row);
-			var ttl = endofduty.format('x') - moment().format('x');
 			setTimeout(function () {
 				box.remove();	
 			}, ttl);
+			
 			setTimeout(function () {
-				vshowNotdiensteStandort(location_id, day.add(1, 'days'), max);		
-			}, ttl - 30*60*1000);
+				showNotdiensteStandort(location_id, day.add(1, 'days'), max);		
+			}, ttl - 30*60*1000);			
+		
+		}
+		
 	});
 	
 }

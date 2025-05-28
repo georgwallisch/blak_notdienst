@@ -2,71 +2,61 @@
 
 function getNotdienstData(location_id) {
 		
-	console.log('Hole Notdienst-Daten für '+location_id);
+	console.log('Hole Notdienst-(XML)-Daten für '+location_id);
 	
 	var dfd = $.Deferred();
-	
-	getNotdienstXMLdata(location_id).done(function(data) {
-						
-			debug2box(data,'NotdienstXMLData');
-			
-			let container = data['container'];
-			if(container['code'] != 'OK') {
-				console.log('XML-Result-Code: ' + container['code']);
-				dfd.resolve(false);
-			}
-			let entries = container['entries']['entry'];
-			if(!Array.isArray(entries)) {
-				console.log('Kein Entry-Array vorhanden! Ist Typ ' + typeof entries);
-				dfd.resolve(false);
-			}
-			
-			let result = {};
-			let list = [];
-			
-			result['created'] = moment.utc(container['created']).local();
-			let descr = container['descr'].split(':');
-			result['type'] = descr[0].trim();
-			let coords = descr[1].split(',');
-			result['lat'] = Number.parseFloat(coords[0]);
-			result['lon'] = Number.parseFloat(coords[1]);
-			
-			var entry;
-			
-			for(var i = 0; i < entries.length; ++i) {
-				entry = entries[i];
-				entry['from'] = moment.utc(entry['from']).local();
-				entry['to'] = moment.utc(entry['to']).local();
-				entry['lat'] = Number.parseFloat(entry['lat']);
-				entry['lon'] = Number.parseFloat(entry['lon']);
-
-				list.push(entry);
-			}	
-			
-			result['entries'] = list;
-			
-		dfd.resolve(result);
-	});
-	
-	return dfd.promise();
-}
-
-function getNotdienstXMLdata(location_id) {
-	
-	console.log('Hole Notdienst-XML-Daten für '+location_id);
-	
 	var api_url = getSomethingById(api_urls, location_id);
 	var url = api_url['url'];
 	console.log('get url: '+ url);
 	
-	var dfd = $.Deferred();
-	
 	$.ajax({
 			'url':url,
 			'method': 'GET'
-	}).done(function (data) {
-		let xmldata = parseXML(data);
-		dfd.resolve(xmldata);
+	}).done(function (xmldata) {
+		
+		let data = parseXML(xmldata);
+								
+		debug2box(data,'NotdienstXMLData');
+		
+		let container = data['container'];
+		if(container['code'] != 'OK') {
+			console.log('XML-Result-Code: ' + container['code']);
+			dfd.resolve(false);
+		}
+		let entries = container['entries']['entry'];
+		if(!Array.isArray(entries)) {
+			console.log('Kein Entry-Array vorhanden! Ist Typ ' + typeof entries);
+			dfd.resolve(false);
+		}
+		
+		let result = {};
+		let list = [];
+		
+		result['created'] = moment.utc(container['created']).local();
+		let descr = container['descr'].split(':');
+		result['type'] = descr[0].trim();
+		let coords = descr[1].split(',');
+		result['lat'] = Number.parseFloat(coords[0]);
+		result['lon'] = Number.parseFloat(coords[1]);
+		
+		var entry;
+		
+		for(var i = 0; i < entries.length; ++i) {
+			entry = entries[i];
+			entry['from'] = moment.utc(entry['from']).local();
+			entry['to'] = moment.utc(entry['to']).local();
+			entry['lat'] = Number.parseFloat(entry['lat']);
+			entry['lon'] = Number.parseFloat(entry['lon']);
+
+			list.push(entry);
+		}	
+		
+		result['entries'] = list;
+			
+		dfd.resolve(result);
+		
+	}).fail(function (jqXHR, textStatus, errorThrown) {
+		dfd.reject(jqXHR, textStatus, errorThrown);
 	});
 	
 	return dfd.promise();
