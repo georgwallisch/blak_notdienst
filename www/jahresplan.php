@@ -4,7 +4,8 @@
 	require_once 'config.php';
 	
 	$bootstrap_config['local_js'][]  = 'js/notdienst.js';
-	$bootstrap_config['local_css'][]  = 'css/notdienst.css';
+	$bootstrap_config['local_js'][]  = 'js/jahresplan.js';
+	$bootstrap_config['local_css'][]  = 'css/jahresplan.css';
 
 	bootstrap_head($title);
 	

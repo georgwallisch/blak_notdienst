@@ -11,6 +11,8 @@ const api_url = 'np_api.php';
 
 //const nd_qr = 'img/ndportal-url.png';
 
+const nd_json_url = '/data/notdienste.json';
+
 const api_urls = [
 	{'id':'APO1','url':'https://notdienst.sberg.net/api/apipub/notdienst/xmlschnittstelle/XX'},
 	{'id':'APO2','url':'https://notdienst.sberg.net/api/apipub/notdienst/xmlschnittstelle/XX'},
