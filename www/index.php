@@ -1,7 +1,7 @@
 <?php
 
-	require_once 'bootstrap.php';
-	require_once 'config.php';
+	require_once '../lib/bootstrap.php';
+	require_once '../lib/config.php';
 	
 	$bootstrap_config['local_js'][]  = 'js/notdienst.js';
 	$bootstrap_config['local_js'][]  = 'js/aushang.js';

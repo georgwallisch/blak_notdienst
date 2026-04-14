@@ -6,20 +6,14 @@ $(document).ready(function() {
 	main.empty();
 	$('<div>',{'id':'debugbox','class':'container','role':'note'}).insertAfter(main);
 
-	var main_nav = $('#main_nav > div > ul');
+	showNavbar();
 	
-	add_navbar_item(main_nav,'Jahresplan').click(function() {
-			return false;
-	});
-		
-	for(let loc of locations) {
-		
-		add_navbar_item(main_nav,'Notdienst '+loc['location']).click(function() {
-			showNotdienstplan(loc['id']);	
-			return false;
-		});
-	}	
+	const urlParams = new URLSearchParams(window.location.search);
 	
-	getApoID(showNotdienstplan);
+	if(urlParams.has('loc')) {
+		showNotdienstplan(urlParams.get('loc'));
+	} else {
+		getApoID(showNotdienstplan);
+	}
 		
 });

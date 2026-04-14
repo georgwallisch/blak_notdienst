@@ -252,15 +252,45 @@ function setDienstbereit(elem, e, apo_name, apo_ort) {
 	}
 }
 
-function getApoID(callBackFunc) {
+function getAjax(urls, settings) {
+	if(typeof settings != 'object') {
+		settings = {};
+	}
 	
+}
+
+function getApoID(callBackFunc, depth) {
+		
 	if(typeof apo_id == 'undefined') {
+		
+		url = ipinfourl;
+	
+		if(Array.isArray(ipinfourl)) {
+			
+			if(typeof depth == 'number') {
+				if(depth >= ipinfourl.length) {					
+					return false;
+				}		
+			} else {
+				depth = 0;
+			}
+			
+			url = ipinfourl[depth];
+		}
+		
 		$.ajax({
-			'url':ipinfourl,
+			'url':url,
 			'method': 'GET'
 		}).done(function (data) {
-			var apo_id = data['id'];	
-			callBackFunc(apo_id);
+			if(data.hasOwnProperty('id')) {
+				var apo_id = data['id'];	
+				callBackFunc(apo_id);
+			} else {
+				getApoID(callBackFunc, depth + 1);
+			}
+		}).fail(function( jqXHR, textStatus ) {
+			console.log("AJAX Request failed: " + textStatus );
+			getApoID(callBackFunc, depth + 1);
 		});	
 	} else {
 		callBackFunc(apo_id);

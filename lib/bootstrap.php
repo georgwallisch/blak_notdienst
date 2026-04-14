@@ -4,6 +4,9 @@
 * v 4.x.x						*
 *********************************/ 
 
+include_once 'defaults.php';
+
+
 if(!isset($bootstrap_config) or !is_array($bootstrap_config)) {
 	$bootstrap_config = array();
 }

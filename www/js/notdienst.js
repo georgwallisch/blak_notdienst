@@ -1,5 +1,20 @@
 "use strict";
 
+function showNavbar(main_nav) {
+	
+	var main_nav = $('#main_nav > div > ul');
+	
+	if(typeof main_nav != 'object') return false;
+
+	add_navbar_item(main_nav, 'Jahresplan', false, {'href':'jahresplan.php'});
+	
+	add_navbar_item(main_nav, 'Display-Anzeige', false, {'href':'display.php'});
+		
+	for(let loc of locations) {		
+		add_navbar_item(main_nav,'Notdienst '+loc['location'], false, {'href':'index.php?loc='+loc['id']});
+	}	
+}
+
 function showYearPlan() {
 	
 	const today = moment();
@@ -83,7 +98,7 @@ function showYearPlan() {
 	
 	console.log("Lade notdienste.json ..");
 	
-	$.getJSON("data/notdienste.json").done(function(data) {
+	$.getJSON(nd_json_url).done(function(data) {
 			console.log("notdienste.json geladen");
 			$.each(data, function(data_key, data_value) {
 					const apo = getSomethingBySomeKey(locations, 'name', data_key);
