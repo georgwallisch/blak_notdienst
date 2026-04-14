@@ -1,5 +1,5 @@
 *~
 *.marks
-js/resources.js
-img/
-data/
+www/js/resources.js
+www/img/
+www/data/
