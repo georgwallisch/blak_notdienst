@@ -1,0 +1,13 @@
+# ~/.config/systemd/user/notdienst-watchdog.service
+
+[Unit]
+Description=Notdienst Watchdog
+After=graphical-session.target
+
+[Service]
+ExecStart=/home/pi/blak_notdienst/bin/watchdog.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target

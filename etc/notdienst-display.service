@@ -1,0 +1,27 @@
+# ~/.config/systemd/user/notdienst-display.service
+
+[Unit]
+Description=Notdienst Display (Chromium Kiosk)
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/chromium --kiosk http://localhost/notdienst/display.php \
+--no-sandbox \
+--disable-gpu \ 
+--disable-dev-shm-usage \
+--disable-software-rasterizer \
+--disable-extensions \
+--disable-infobars \
+--disable-session-crashed-bubble \
+--disable-features=TranslateUI \
+--no-first-run \
+--noerrdialogs \
+--single-process
+Restart=always
+RestartSec=5
+
+# optional stabiler:
+StartLimitIntervalSec=0
+
+[Install]
+WantedBy=default.target

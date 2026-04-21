@@ -2,6 +2,17 @@
 
 var resultcache = null;
 
+function sendHeartbeat() {
+    $.ajax({
+        url: '/notdienst/heartbeat.php',
+        method: 'POST',
+        cache: false,
+        timeout: 2000
+    }).fail(function() {
+        console.log('Heartbeat fehlgeschlagen');
+    });
+}
+
 function showNotdienstRow(res, box, day, apo, max) {
 	
 	const apo_name = apo['name'];
@@ -191,6 +202,10 @@ $(document).ready(function() {
 	const main = $('#mainbox');
 	main.empty();
 	$('<div>',{'id':'debugbox','class':'container','role':'note'}).insertAfter(main);
+	
+	sendHeartbeat(); 
+	// alle 30 Sekunden
+	setInterval(sendHeartbeat, 30000);
 	
 	getApoID(function(apo_id) {
 			showNotdienstplan(apo_id);
