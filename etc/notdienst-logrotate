@@ -1,7 +1,0 @@
-/var/log/notdienst-watchdog.log {
-    daily
-    rotate 7
-    compress
-    missingok
-    notifempty
-}
