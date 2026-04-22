@@ -1,4 +1,6 @@
 <?php
+	require_once '../lib/heartbeat_lib.php';
+	write_heartbeat();
 	
 	require_once '../lib/bootstrap.php';
 	require_once '../lib/config.php';
