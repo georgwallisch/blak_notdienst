@@ -70,13 +70,12 @@ function getNotdienstData(location_id) {
 	console.log('Hole Notdienst-(XML)-Daten für '+location_id);
 	
 	var dfd = $.Deferred();
-	var api_url = getSomethingById(api_urls, location_id);
-	var url = api_url['url'];
-	console.log('get url: '+ url);
+	console.log('get url: '+ api_url);
 	
 	$.ajax({
-			'url':url,
-			'method': 'GET'
+			'url':api_url,
+			'method': 'POST',
+			'data': {'id':location_id}
 	}).done(function (xmldata) {
 		
 		let data = parseXML(xmldata);
