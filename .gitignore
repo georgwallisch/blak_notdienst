@@ -1,5 +1,6 @@
 *~
 *.marks
-www/js/resources.js
 www/img/
 www/data/
+cache/
+config/config.local.php
