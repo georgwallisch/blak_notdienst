@@ -98,7 +98,8 @@ function showYearPlan() {
 	
 	console.log("Lade notdienste.json ..");
 	
-	$.getJSON(nd_json_url).done(function(data) {
+	$.getJSON(nd_json_url)
+		.done(function(data) {
 			console.log("notdienste.json geladen");
 			$.each(data, function(data_key, data_value) {
 					const apo = getSomethingBySomeKey(locations, 'name', data_key);
@@ -123,7 +124,12 @@ function showYearPlan() {
 					
 					$('<div>', {'id':'legende_' + apo_id, 'class':'legende_entry nd_' + apo_id}).appendTo(legende).append('<span class="legende_id">' + apo_c + '</span>: ' + apo['name'] + ' (' + data_value.length + ' Dienste)');
 			});
-	});	
+		})
+		.fail(function(jqxhr, textStatus, error) {
+			var err = textStatus + ", " + error;
+			console.log( "Request Failed: " + err );
+			$('<div>', {'class':'alert alert-warning','role':'alert'}).insertBefore(tabelle).append("Kann Notdienstdaten nicht laden! ("+err+")");
+	});
 }
 
 function showNotdienstplan(location_id, max_n, max_d) {
