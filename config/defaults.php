@@ -13,6 +13,11 @@ return [
     ],
 
     'debug' => false,
+    
+    'curl' => [
+        'connecttimeout' => 5,
+        'timeout'  => 10
+    ],
 
     'api_urls' => []
 ];

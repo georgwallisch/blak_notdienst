@@ -74,7 +74,7 @@ function getNotdienstData(location_id) {
 	
 	$.ajax({
 			'url':api_url,
-			'method': 'POST',
+			'method': 'GET',
 			'data': {'id':location_id}
 	}).done(function (xmldata) {
 		
