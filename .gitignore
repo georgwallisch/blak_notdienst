@@ -3,4 +3,5 @@
 www/img/
 www/data/
 cache/
+log/
 config/config.local.php

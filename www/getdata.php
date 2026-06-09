@@ -1,15 +1,115 @@
 <?php
 
-ob_start();
+$config = require __DIR__.'/../config/config.php';
 
-$config = require '../config/config.php';
-$api_urls = $config['api_urls'];
-$cache_age = $config['cache']['max_age'];
-$cache_dir = $config['cache']['directory'];
-$curl_params = $config['curl'];
+function _log($msg, $level = 0) {
+    
+	global $config;
+	
+	if(!$config['logging']['enabled'] or $level > $config['logging']['level']) return false;
 
+    error_log(
+        date('[Y-m-d H:i:s] ') . $msg . PHP_EOL,
+        3,
+        $config['logging']['file']
+    );
+}
 
-function downloadData($url, $params) {
+function getCacheFile($id) {
+	global $config;
+	$cache_params = $config['cache'];
+	
+	return $cache_params['directory'].'/'.$cache_params['file_prefix'].$id.$cache_params['file_suffix'];
+}
+
+function getCache($id) {
+	global $config;
+	$cache_params = $config['cache'];
+	
+	$cache_file = getCacheFile($id);
+	
+	$data = false;
+	
+	if(file_exists($cache_file)) {
+		$age = time() - filemtime($cache_file);
+		if($age < $cache_params['max_age']) {
+    		_log(
+				sprintf(
+					'Cache-Treffer %s (Alter %d Sekunden)',
+					$cache_file,
+					$age
+				),
+				LOG_INFO
+			);
+			$data = file_get_contents($cache_file);
+		} else {
+		    _log(
+				sprintf(
+					'Cache %s ist zu alt (%d Sekunden)',
+					$cache_file,
+					$age
+				),
+				LOG_INFO
+			);
+				
+			$data = updateCache($id);
+			if($data === false) {
+				_log(
+					sprintf(
+						'Nutze veralteten Cache %s, weil Aktualisierung fehlgeschlagen ist',
+						$cache_file
+					),
+					LOG_WARN
+				);
+				$data = file_get_contents($cache_file);
+			}			
+		}
+	} else {
+		_log(
+			sprintf(
+				'Cache %s existiert (noch) nicht',
+				$cache_file
+			),
+			LOG_INFO
+		);
+		$data = updateCache($id);
+	}
+    
+	return $data;
+}
+
+function updateCache($id) {
+	global $config;
+	$api_urls = $config['api_urls'];
+	
+	if(array_key_exists($id, $api_urls)) {
+		$url = $api_urls[$id];
+	} else {
+		_log('Unbekannte ApoID: '.$id, LOG_WARN);
+		return null;
+	}
+	
+	$cache_file = getCacheFile($id);
+    $data = downloadData($url);
+    
+    if($data !== false) {		
+		if(file_put_contents($cache_file, $data) === false) {
+			_log('Konnte Cache-Datei '.$cache_file.' nicht schreiben!', LOG_ERR);
+		} else {
+			chmod($cache_file, 0664);
+			_log('Cache aktualisiert '.$cache_file, LOG_INFO);
+		}
+	} else {
+		_log('Konnte keine Daten von '.$url.' lesen!', LOG_WARN);
+	}
+	
+	return $data;
+}
+
+function downloadData($url) {
+	
+	global $config;	
+	$params = $config['curl'];
 
 	$ch = curl_init();
     
@@ -23,21 +123,24 @@ function downloadData($url, $params) {
     $http_code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
     
     if($output === false) {
-		error_log(
+		_log(
 			sprintf(
 				'[getdata] cURL-Fehler für %s: %s',
 				$url,
 				curl_error($ch)
-			)
+			),
+			LOG_ERR
 		);
 	} elseif ($http_code != 200) {
-		error_log(
+		_log(
 			sprintf(
 				'[getdata] HTTP %d von %s',
 				$http_code,
 				$url
-			)
+			),
+			LOG_ERR
 		);
+		$output = false;
 	}
 	
     curl_close($ch);      
@@ -45,83 +148,42 @@ function downloadData($url, $params) {
     return $output;
 }
 
-if(array_key_exists('id', $_GET)) {
-	$apo_id = trim($_GET['id']);	
-	
-	if(array_key_exists($apo_id, $api_urls)) {
-		$apo_url = $api_urls[$apo_id];
-	} else {
-		ob_end_clean();
-		header('Content-Type: text/plain');
-		http_response_code(400);
-		echo "Unbekannte ApoID: '$apo_id'";
-		exit;
-	} 	
-} else {
-	ob_end_clean();
-    header('Content-Type: text/plain');
-	http_response_code(400);
-    echo "Keine ApoID vorhanden!";
+/* MAIN */
+
+if(PHP_SAPI === 'cli') {
+	foreach($config['api_urls'] as $id => $url) {
+		echo 'Aktualisiere Cache für '.$id.': '; 
+    	echo updateCache($id) === false ? 'Fehler!' : 'OK';
+    	echo "\n";
+    }
     exit;
 }
 
-$cache_file = $cache_dir.'/notdienst_'.$apo_id.'.xml';
-
-if(file_exists($cache_file)) {
-
-    $age = time() - filemtime($cache_file);
-
-    if ($age < $cache_age) {
-    	ob_end_clean();
-    	header('Content-Type: application/xml');
-    	readfile($cache_file);
-        exit;
-    }
-}
-
-$new_data = downloadData($apo_url, $curl_params);
-
-if ($new_data !== false) {
-
-	if (file_put_contents($cache_file, $new_data) === false) {
-		error_log(
-			sprintf(
-				'[getdata] Konnte Cache-Datei %s nicht schreiben',
-				$cache_file
-			)
-		);
-	} else {
-		error_log(
-			sprintf(
-				'[getdata] Cache aktualisiert %s',
-				$cache_file
-			)
-		);
-	}
-   	
-	ob_end_clean();
-    header('Content-Type: application/xml');
-    echo $new_data;
-
-} elseif (file_exists($cache_file)) {
-
-	error_log(
-        sprintf(
-            '[getdata] Verwende alten Cache %s (Alter: %d Sekunden)',
-            $cache_file,
-            time() - filemtime($cache_file)
-        )
-    );
+if(isset($_GET['id'])) {
+	$apo_id = trim($_GET['id']);	
 	
-  	ob_end_clean();
-    header('Content-Type: application/xml');
-    readfile($cache_file);
-
+	$data = getCache($apo_id);
+	
+	if($data === null) {
+		header('Content-Type: text/plain');
+		http_response_code(400);
+		echo 'Unbekannte ApoID: '.$apo_id;
+		exit;
+	} elseif($data === false) {
+	    header('Content-Type: text/plain');
+	    http_response_code(503);
+	    echo 'Keine Notdienstdaten verfügbar!';
+	} else {
+	    header('Content-Type: application/xml');
+	    echo $data;
+	}
+ 	
 } else {
-	ob_end_clean();
+	
     header('Content-Type: text/plain');
-    http_response_code(503);
-    echo "Keine Notdienstdaten verfügbar";
+   	http_response_code(400);
+    echo "Keine ApoID vorhanden!";
+    exit;
 }
 
 ?>
